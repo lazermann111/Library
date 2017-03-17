@@ -1,4 +1,5 @@
-﻿using Library3.Models;
+﻿using Library3.DTO;
+using Library3.Models;
 using Library3.Repositories;
 using System;
 using System.Collections.Generic;
@@ -21,14 +22,14 @@ namespace Library3.Controllers
             _repository = WebApiApplication.MongoDbUsed ? (IBookrepository) mongo : postgres;
         }
 
-            public IEnumerable<Book> GetAllBooks()
+            public IEnumerable<BookDto> GetAllBooks()
             {
                 return _repository.GetAll();
             }
 
-            public Book GetBook(string id)
+            public BookDto GetBook(string id)
             {
-                Book item = _repository.Get(id);
+                BookDto item = _repository.Get(id);
                 if (item == null)
                 {
                     throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -36,7 +37,7 @@ namespace Library3.Controllers
                 return item;
             }
 
-            public IEnumerable<Book> GetBookByAuthor(string author)
+            public IEnumerable<BookDto> GetBookByAuthor(string author)
             {
                 return _repository.GetAll().Where(
                     p => string.Equals(p.Author.Name, author, StringComparison.OrdinalIgnoreCase));
@@ -44,11 +45,10 @@ namespace Library3.Controllers
 
             public HttpResponseMessage PostBook(string name, string authorId)
             {
-                var item = _repository.Add( name, authorId);
-                var response = Request.CreateResponse<Book>(HttpStatusCode.Created, item);
+                _repository.Add( name, authorId);
+                var response = Request.CreateResponse(HttpStatusCode.Created);
 
-                string uri = Url.Link("DefaultApi", new { id = item.Id });
-                response.Headers.Location = new Uri(uri);
+               
                 return response;
             }
 

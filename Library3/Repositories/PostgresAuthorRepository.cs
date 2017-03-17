@@ -4,34 +4,52 @@ using System.Linq;
 using System.Web;
 using Library3.Models;
 using Library3.Repositories;
+using Library3.Helpers;
+using Library3.DTO;
 
 namespace Library3.Models.Repositories
 {
     public class PostgresAuthorRepository : IAuthorReposiory
     {
-        public Author Add(string name)
+        public void Add(string name)
         {
-            throw new NotImplementedException();
+            var session = PostgresSessionManager.OpenSession();
+            var author = new Author { Name = name, Books = new List<Book>()};
+
+            session.Save(author);
         }
 
-        public Author Get(string id)
+        public AuthorDto Get(string id)
         {
-            throw new NotImplementedException();
+            var author =  PostgresSessionManager.OpenSession().Get<Author>(id);
+            var dto = AutoMapper.Mapper.Map<AuthorDto>(author);
+            return dto;
         }
 
-        public IEnumerable<Author> GetAll()
+        public IEnumerable<AuthorDto> GetAll()
         {
-            throw new NotImplementedException();
+            var authors = PostgresSessionManager.OpenSession().QueryOver<Author>().List();
+            var dtos = AutoMapper.Mapper.Map<List<AuthorDto>>(authors);
+            return dtos;
         }
 
         public void Remove(string id)
         {
-            throw new NotImplementedException();
+            var session = PostgresSessionManager.OpenSession();
+            var author = session.Get<Author>(id);
+            session.Delete(author);
         }
 
         public bool Update(string authorId, string name)
         {
-            throw new NotImplementedException();
+            var session = PostgresSessionManager.OpenSession();
+            var author = session.Get<Author>(authorId);
+
+            if (author == null) return false;
+
+            author.Name = name;
+            session.Update(author);
+            return true;
         }
     }
 }

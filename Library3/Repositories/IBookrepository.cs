@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Library3.DTO;
 
 namespace Library3.Repositories
 {
     interface IBookrepository
     {
-        IEnumerable<Book> GetAll();
-        Book Get(string id);
-        Book Add(string name, string authorId);
+        IEnumerable<BookDto> GetAll();
+        BookDto Get(string id);
+        void Add(string name, string authorId);
         void Remove(string id);
         bool Update(string id, string name, string authorId);
     }

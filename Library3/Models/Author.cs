@@ -9,11 +9,12 @@ namespace Library3.Models
     public class Author
     {
      //   [BsonId]
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public ICollection<Book> Books { get; set; }
+        public virtual string Id { get; set; }
+        public virtual string Name { get; set; }
+        public virtual ICollection<Book> Books { get; set; }
 
         // for mongo
-        public ICollection<string> BookIds { get; set; }
+       
+        public virtual ICollection<string> BookIds { get; set; }
     }
 }

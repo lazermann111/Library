@@ -1,6 +1,7 @@
 ﻿using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using System;
@@ -27,11 +28,14 @@ namespace Library3.Helpers
                     .Port(5432)
                     .Database("test")
                     .Username("postgres")
-                    .Password("postgres")))
+                    .Password("postgres")))      
                 .Mappings(m => m
                     .AutoMappings.Add(model))
                 .ExposeConfiguration(config => new SchemaExport(config).Create(false, true))
                 .BuildSessionFactory();
+
+          
+
         }
 
 

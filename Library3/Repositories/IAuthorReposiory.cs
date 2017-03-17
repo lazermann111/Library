@@ -1,4 +1,5 @@
-﻿using Library3.Models;
+﻿using Library3.DTO;
+using Library3.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace Library3.Repositories
 {
     interface IAuthorReposiory
     {
-        IEnumerable<Author> GetAll();
-        Author Get(string id);
-        Author Add(string name);
+        IEnumerable<AuthorDto> GetAll();
+        AuthorDto Get(string id);
+        void Add(string name);
         void Remove(string id);
         bool Update(string authorId, string name);
     }

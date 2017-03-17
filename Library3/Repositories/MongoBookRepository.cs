@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Library3.Models;
+using Library3.DTO;
+
 namespace Library3.Repositories
 {
     public class MongoBookRepository : IBookrepository
@@ -39,19 +41,21 @@ namespace Library3.Repositories
 
 
 
-        public Book Get(string id)
+        public BookDto Get(string id)
         {
             var q = Query.EQ("_id", id);
             var book = _books.FindOne(q);
             book.Author = _database.GetCollection<Author>("Authors").FindOne(Query.EQ("_id", book.AuthorId));
 
-            return book;
+            var dto = AutoMapper.Mapper.Map<BookDto>(book);
+            return dto;
         }
 
-        public IEnumerable<Book> GetAll()
+        public IEnumerable<BookDto> GetAll()
         {
             MongoCursor<Book> cursor = _books.FindAll();
-            return cursor.AsQueryable<Book>();
+            var dto = AutoMapper.Mapper.Map<List<BookDto>>(cursor.ToList());
+            return dto;
         }
 
         public void Remove(string id)
@@ -60,7 +64,7 @@ namespace Library3.Repositories
             _books.Remove(query);
         }
 
-        public Book Add(string name, string authorId)
+        public void Add(string name, string authorId)
         {
             var authors = _database.GetCollection<Author>("Authors");
             var author = authors.FindOne(Query.EQ("_id", authorId));
@@ -68,7 +72,7 @@ namespace Library3.Repositories
             var item = new Book { Name = name, Author = author };
             item.Id = ObjectId.GenerateNewId().ToString();
             _books.Insert(item);
-            return item;
+            
         }
 
         public bool Update(string id, string name, string authorId)

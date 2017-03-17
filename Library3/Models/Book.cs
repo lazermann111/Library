@@ -8,12 +8,12 @@ namespace Library3.Models
 {
     public class Book
     {
-      //  [BsonId]
-        public string Id { get; set; }
-        public string Name { get; set; }   
-        public Author Author { get; set; }
+        //  [BsonId]
+        public virtual string Id { get; set; }
+        public virtual string Name { get; set; }   
+        public virtual Author Author { get; set; }
 
         //for mongo
-        public string AuthorId { get; set; }
+        public virtual string AuthorId { get; set; }
     }
 }

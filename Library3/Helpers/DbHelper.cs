@@ -85,6 +85,7 @@ namespace Library3.Helpers
 
             using (var session = PostgresSessionManager.OpenSession())
             {
+                var tx = session.BeginTransaction();
                 foreach (var book in books) session.Save(book);
                 foreach (var author in authors) session.Save(author);
 
@@ -93,6 +94,8 @@ namespace Library3.Helpers
 
                 session.Update(books[0]);
                 session.Update(authors[0]);
+
+                tx.Commit();
             }
         }
        

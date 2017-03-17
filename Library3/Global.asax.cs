@@ -1,4 +1,5 @@
 ﻿using Library3.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace Library3
 
         protected void Application_Start()
         {
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.Re‌​ferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
             DbHelper.GenerateMongoDbContent();
