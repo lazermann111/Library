@@ -15,10 +15,11 @@ namespace Library3
 
         protected void Application_Start()
         {
-            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.Re‌​ferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
+            AutomapperConfiguration.Configure();
             DbHelper.GenerateMongoDbContent();
             DbHelper.GeneratePostgresContent();
         }

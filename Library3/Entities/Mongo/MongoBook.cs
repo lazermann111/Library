@@ -3,18 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MongoDB.Bson;
 
-namespace Library3.Models
+namespace Library3.Entities.Mongo
 {
-    public class Author
+    public class MongoBook
     {
-     //   [BsonId]
+        [BsonId]
         public virtual string Id { get; set; }
         public virtual string Name { get; set; }
-        public virtual ICollection<Book> Books { get; set; }
 
-        // for mongo
-       
-        public virtual ICollection<string> BookIds { get; set; }
+      //  [Bson]
+        public virtual BsonValue AuthorId { get; set; }
     }
 }

@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Library3.Postgres;
+
 
 namespace Library3.Repositories
 {
@@ -13,7 +15,7 @@ namespace Library3.Repositories
         public void Add(string name, string authorId)
         {
             var session = PostgresSessionManager.OpenSession();
-            var author = new Book { Name = name};
+            var author = new PostgresBook { Name = name};
 
             session.Save(author);
            
@@ -21,14 +23,14 @@ namespace Library3.Repositories
 
         public BookDto Get(string id)
         {
-            var book = PostgresSessionManager.OpenSession().Get<Book>(id);
+            var book = PostgresSessionManager.OpenSession().Get<PostgresBook>(Int16.Parse(id));
             var dto = AutoMapper.Mapper.Map<BookDto>(book);
             return dto;
         }
 
         public IEnumerable<BookDto> GetAll()
         {
-            var books = PostgresSessionManager.OpenSession().QueryOver<Book>().List();
+            var books = PostgresSessionManager.OpenSession().QueryOver<PostgresBook>().List();
             var dtos = AutoMapper.Mapper.Map<List<BookDto>>(books);
             return dtos;
         }
@@ -36,14 +38,14 @@ namespace Library3.Repositories
         public void Remove(string id)
         {
             var session = PostgresSessionManager.OpenSession();
-            var book = session.Get<Book>(id);
+            var book = session.Get<PostgresBook>(Int16.Parse(id));
             session.Delete(book);
         }
 
         public bool Update(string id, string name, string authorId)
         {
             var session = PostgresSessionManager.OpenSession();
-            var book = session.Get<Book>(authorId);
+            var book = session.Get<PostgresBook>(Int16.Parse(authorId));
 
             if (book == null) return false;
 

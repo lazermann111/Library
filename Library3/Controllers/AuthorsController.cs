@@ -39,7 +39,7 @@ namespace Library3.Controllers
         }
 
        
-        public HttpResponseMessage PostAuthor(string name, string authorId)
+        public HttpResponseMessage PostAuthor(string name)
         {
              _repository.Add(name);
             var response = Request.CreateResponse(HttpStatusCode.Created);

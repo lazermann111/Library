@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using FluentNHibernate.Conventions.Helpers;
+using Library3.Postgres;
 
 namespace Library3.Helpers
 {
@@ -19,7 +21,7 @@ namespace Library3.Helpers
         static PostgresSessionManager()
         {
             AutoPersistenceModel model = AutoMap.Assembly(System.Reflection.Assembly.GetCallingAssembly())
-            .Where(t => t.Namespace == "Library3.Models");
+            .Where(t => t.Namespace == "Library3.Entities.Postgres");
 
             sessionFactory = Fluently.Configure()
                 .Database(PostgreSQLConfiguration.Standard
@@ -28,14 +30,10 @@ namespace Library3.Helpers
                     .Port(5432)
                     .Database("test")
                     .Username("postgres")
-                    .Password("postgres")))      
-                .Mappings(m => m
-                    .AutoMappings.Add(model))
+                    .Password("")))
+                 .Mappings(c => c.FluentMappings.AddFromAssemblyOf<PostgresAuthorMap>().Conventions.Add(AutoImport.Never()))
                 .ExposeConfiguration(config => new SchemaExport(config).Create(false, true))
                 .BuildSessionFactory();
-
-          
-
         }
 
 

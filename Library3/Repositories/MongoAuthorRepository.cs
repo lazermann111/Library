@@ -8,45 +8,31 @@ using System.Linq;
 using System.Web;
 using Library3.Repositories;
 using Library3.DTO;
+using Library3.Entities.Mongo;
+using Library3.Helpers;
 
 namespace Library3.Repositories
 {
     public class MongoAuthorRepository : IAuthorReposiory
     {
 
-        MongoClient _client;
-        MongoDatabase _database;
-        MongoCollection<Author> _authors;
+        
+        MongoCollection<MongoAuthor> _authors;
 
         public MongoAuthorRepository()
         {
-
-
-            _client = new MongoClient("mongodb://localhost:27017");
-            var server = _client.GetServer();
-            _database = server.GetDatabase("local");
-            _authors = _database.GetCollection<Author>("Authors");
-
-
-         /*   _authors.RemoveAll();
-            for (int index = 1; index < 3; index++)
-            {
-                AuthorId b = new AuthorId
-                {
-                    Id = ObjectId.GenerateNewId().ToString(),
-                    Name = string.Format("author{0}", index),
-                };
-                Add(b);
-            }*/
-
+            _authors = MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors");
         }
 
-       
 
         public IEnumerable<AuthorDto> GetAll()
         {
-            MongoCursor<Author> cursor = _authors.FindAll();
+            MongoCursor<MongoAuthor> cursor = _authors.FindAll();
             var dto = AutoMapper.Mapper.Map<List<AuthorDto>>(cursor.ToList());
+            var books =
+                MongoSessionManager.Database.GetCollection<MongoBook>("Books")
+                    .FindAll().AsQueryable();
+            
             return dto;
         }
 
@@ -82,10 +68,10 @@ namespace Library3.Repositories
 
         public void Add(string name)
         {
-            Author b = new Author
+            MongoAuthor b = new MongoAuthor
             {
                 Id = ObjectId.GenerateNewId().ToString(),
-                Name = string.Format("author{0}", name),
+                Name = $"author{name}",
             };
             _authors.Insert(b);
         }

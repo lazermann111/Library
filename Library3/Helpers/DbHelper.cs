@@ -10,6 +10,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using AutoMapper;
+using Library3.Entities.Mongo;
+using Library3.Postgres;
+
 
 namespace Library3.Helpers
 {
@@ -19,18 +23,18 @@ namespace Library3.Helpers
         {
 
             var server = new MongoClient("mongodb://localhost:27017").GetServer();
-            var _books = server.GetDatabase("local").GetCollection<Book>("BookIds");
-            var _authors = server.GetDatabase("local").GetCollection<Book>("Authors");
+            var _books = server.GetDatabase("local").GetCollection<MongoBook>("Books");
+            var _authors = server.GetDatabase("local").GetCollection<MongoBook>("Authors");
 
             _books.RemoveAll();
             _authors.RemoveAll();
 
-            IList<Book> books = new List<Book>();
-            IList<Author> authors = new List<Author>();
+            IList<MongoBook> books = new List<MongoBook>();
+            IList<MongoAuthor> authors = new List<MongoAuthor>();
 
             for (int index = 1; index < 3; index++)
             {
-                Book book = new Book
+                MongoBook book = new MongoBook
                 {
                     Id = ObjectId.GenerateNewId().ToString(),
                     Name = string.Format("book{0}", index),
@@ -40,7 +44,7 @@ namespace Library3.Helpers
             
             for (int index = 1; index < 3; index++)
             {
-                Author author = new Author
+                MongoAuthor author = new MongoAuthor
                 {
                     Id = ObjectId.GenerateNewId().ToString(),
                     Name = string.Format("author{0}", index),
@@ -49,7 +53,7 @@ namespace Library3.Helpers
             }
 
             books[0].AuthorId = authors[0].Id;
-            authors[0].BookIds = new List<string> { books[0].Id };
+            authors[0].BookIds = new List<BsonValue> { books[0].Id };
 
             foreach (var book in books) _books.Insert(book);
             foreach (var author in authors) _authors.Insert(author);
@@ -58,14 +62,14 @@ namespace Library3.Helpers
 
         public static void GeneratePostgresContent()
         {
-            IList<Book> books = new List<Book>();
-            IList<Author> authors = new List<Author>();
+            IList<PostgresBook> books = new List<PostgresBook>();
+            IList<PostgresAuthor> authors = new List<PostgresAuthor>();
 
             for (int index = 1; index < 3; index++)
             {
-                Book book = new Book
+                PostgresBook book = new PostgresBook
                 {
-                    Id = ObjectId.GenerateNewId().ToString(),
+                   // Id = ObjectId.GenerateNewId().ToString(),
                     Name = string.Format("book{0}", index),
                 };
                 books.Add(book);
@@ -73,9 +77,9 @@ namespace Library3.Helpers
 
             for (int index = 1; index < 3; index++)
             {
-                Author author = new Author
+                PostgresAuthor author = new PostgresAuthor
                 {
-                    Id = ObjectId.GenerateNewId().ToString(),
+                //    Id = ObjectId.GenerateNewId().ToString(),
                     Name = string.Format("author{0}", index),
                 };
                 authors.Add(author);
@@ -90,7 +94,7 @@ namespace Library3.Helpers
                 foreach (var author in authors) session.Save(author);
 
                 books[0].Author = authors[0];
-                authors[0].Books = new List<Book> { books[0] };
+                authors[0].Books = new List<PostgresBook> { books[0] };
 
                 session.Update(books[0]);
                 session.Update(authors[0]);
@@ -98,6 +102,5 @@ namespace Library3.Helpers
                 tx.Commit();
             }
         }
-       
     }
 }

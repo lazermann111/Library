@@ -6,6 +6,8 @@ using Library3.Models;
 using Library3.Repositories;
 using Library3.Helpers;
 using Library3.DTO;
+using Library3.Postgres;
+
 
 namespace Library3.Models.Repositories
 {
@@ -14,21 +16,21 @@ namespace Library3.Models.Repositories
         public void Add(string name)
         {
             var session = PostgresSessionManager.OpenSession();
-            var author = new Author { Name = name, Books = new List<Book>()};
+            var author = new PostgresAuthor() { Name = name, Books = new List<PostgresBook>()};
 
             session.Save(author);
         }
 
         public AuthorDto Get(string id)
         {
-            var author =  PostgresSessionManager.OpenSession().Get<Author>(id);
+            var author =  PostgresSessionManager.OpenSession().Get<PostgresAuthor>(Int16.Parse(id));
             var dto = AutoMapper.Mapper.Map<AuthorDto>(author);
             return dto;
         }
 
         public IEnumerable<AuthorDto> GetAll()
         {
-            var authors = PostgresSessionManager.OpenSession().QueryOver<Author>().List();
+            var authors = PostgresSessionManager.OpenSession().QueryOver<PostgresAuthor>().List();
             var dtos = AutoMapper.Mapper.Map<List<AuthorDto>>(authors);
             return dtos;
         }
@@ -36,14 +38,14 @@ namespace Library3.Models.Repositories
         public void Remove(string id)
         {
             var session = PostgresSessionManager.OpenSession();
-            var author = session.Get<Author>(id);
+            var author = session.Get<PostgresAuthor>(Int16.Parse(id));
             session.Delete(author);
         }
 
         public bool Update(string authorId, string name)
         {
             var session = PostgresSessionManager.OpenSession();
-            var author = session.Get<Author>(authorId);
+            var author = session.Get<PostgresAuthor>(Int16.Parse(authorId));
 
             if (author == null) return false;
 
