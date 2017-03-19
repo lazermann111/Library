@@ -28,9 +28,9 @@ namespace Library3.Models.Repositories
             return dto;
         }
 
-        public IEnumerable<AuthorDto> GetAll()
+        public IEnumerable<AuthorDto> GetAll(int page)
         {
-            var authors = PostgresSessionManager.OpenSession().QueryOver<PostgresAuthor>().List();
+            var authors = PostgresSessionManager.OpenSession().QueryOver<PostgresAuthor>().List().OrderBy(a => a.Name).Skip(page * 10).Take(10);
             var dtos = AutoMapper.Mapper.Map<List<AuthorDto>>(authors);
             return dtos;
         }

@@ -23,34 +23,27 @@ namespace Library3.Helpers
             Mapper.CreateMap<PostgresAuthor, AuthorDto>();
 
 
-            Mapper.CreateMap<MongoBook, BookDto>();
-                /*.MaxDepth(2)
+
+          /*  Mapper.CreateMap<MongoBook, BookBaseDto>();
+            Mapper.CreateMap<MongoAuthor, AuthorBaseDto>();
+            Mapper.CreateMap<MongoBook, BookDto>()
+                .MaxDepth(1)
                 .ForMember(entity => entity.Author, expression => expression.ResolveUsing(a =>
                 {
-                    if (a?.AuthorId == null) return null;
-                    var table = MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors");
-                    return Mapper.Map<AuthorDto>(table.FindOneById(a.AuthorId)) ;
-                })).MaxDepth(2);*/
+                    Console.WriteLine("AuthorBaseDto !!");
+                    return a?.AuthorId == null ? null : Mapper.Map<AuthorBaseDto>(MongoSessionManager.Database.FetchDBRefAs<MongoAuthor>(a?.AuthorId));
+                    // var table = MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors");
+                }));
 
-            Mapper.CreateMap<MongoAuthor, AuthorDto>();
-            /*.MaxDepth(2)
+            Mapper.CreateMap<MongoAuthor, AuthorDto>()
+            .MaxDepth(1)
               .ForMember(entity => entity.Books, expression => expression.ResolveUsing(a =>
                 {
-                    if (a?.BookIds == null) return null;
-                    var table = MongoSessionManager.Database.GetCollection<MongoBook>("Books");
-                  
-                    var q = Query.In("_id",  a.BookIds);
-                    return Mapper.Map<List<BookDto>>(table.Find(q).ToList());
-                })).MaxDepth(2)
-                .ReverseMap()
-             .ForMember(entity => entity.BookIds, expression => expression.MapFrom(a => a.Books.Select(b => b.Id)));
-             */
+                    // var table = MongoSessionManager.Database.GetCollection<MongoBook>("Books");
 
-            /*ResolveUsing(a =>
-                {
-                    var table = MongoSessionManager.Database.GetCollection<MongoBook>("Books");
-                    return Mapper.Map<List<BookDto>>( table.FindAllAs<MongoBook>().ToList());
-                })); */
+                    return a?.BookIds?.Select(b => Mapper.Map<BookBaseDto>(MongoSessionManager.Database.FetchDBRefAs<MongoBook>(b))).ToList();
+                }))
+                .ReverseMap();*/  
         }
     }
 }

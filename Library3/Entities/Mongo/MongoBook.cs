@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace Library3.Entities.Mongo
 {
@@ -14,6 +15,6 @@ namespace Library3.Entities.Mongo
         public virtual string Name { get; set; }
 
       //  [Bson]
-        public virtual BsonValue AuthorId { get; set; }
+        public virtual MongoDBRef AuthorId { get; set; }
     }
 }

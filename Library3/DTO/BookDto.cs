@@ -5,10 +5,9 @@ using System.Web;
 
 namespace Library3.DTO
 {
-    public class BookDto
+    public class BookDto : BookBaseDto
     {
-        public virtual string Id { get; set; }
-        public virtual string Name { get; set; }
+     
         public virtual AuthorDto Author { get; set; }
     }
 }

@@ -25,14 +25,10 @@ namespace Library3.Repositories
         }
 
 
-        public IEnumerable<AuthorDto> GetAll()
+        public IEnumerable<AuthorDto> GetAll(int page)
         {
             MongoCursor<MongoAuthor> cursor = _authors.FindAll();
-            var dto = AutoMapper.Mapper.Map<List<AuthorDto>>(cursor.ToList());
-            var books =
-                MongoSessionManager.Database.GetCollection<MongoBook>("Books")
-                    .FindAll().AsQueryable();
-            
+            var dto = cursor.ToList().OrderBy(a => a.Name).Skip(page * 10).Take(10).Select(d => d.Map());
             return dto;
         }
 
@@ -42,9 +38,9 @@ namespace Library3.Repositories
           // var filter2 = Builders<AuthorId>.Filter.Eq("_id", id);
           // var filter3 = Builders<AuthorId>.Filter.Eq("Name", id);
            var q = Query.EQ("_id", id);
-           var author = _authors.FindOne(q);
-           var dto = AutoMapper.Mapper.Map<AuthorDto>(author);
-           return dto;
+           var author = _authors.FindOne(q).Map();
+           
+           return author;
         }
 
        

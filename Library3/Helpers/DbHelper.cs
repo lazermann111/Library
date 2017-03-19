@@ -32,7 +32,7 @@ namespace Library3.Helpers
             IList<MongoBook> books = new List<MongoBook>();
             IList<MongoAuthor> authors = new List<MongoAuthor>();
 
-            for (int index = 1; index < 3; index++)
+            for (int index = 1; index < 30; index++)
             {
                 MongoBook book = new MongoBook
                 {
@@ -42,7 +42,7 @@ namespace Library3.Helpers
                 books.Add(book);
             }
             
-            for (int index = 1; index < 3; index++)
+            for (int index = 1; index < 30; index++)
             {
                 MongoAuthor author = new MongoAuthor
                 {
@@ -52,9 +52,11 @@ namespace Library3.Helpers
                 authors.Add(author);
             }
 
-            books[0].AuthorId = authors[0].Id;
-            authors[0].BookIds = new List<BsonValue> { books[0].Id };
-
+            for (var i = 0; i < books.Count; i++)
+            {
+                books[i].AuthorId = new MongoDBRef(_authors.Name, authors[i].Id);
+                authors[i].BookIds = new List<MongoDBRef> {new MongoDBRef(_books.Name, books[i].Id) };
+            }
             foreach (var book in books) _books.Insert(book);
             foreach (var author in authors) _authors.Insert(author);
             
@@ -65,7 +67,7 @@ namespace Library3.Helpers
             IList<PostgresBook> books = new List<PostgresBook>();
             IList<PostgresAuthor> authors = new List<PostgresAuthor>();
 
-            for (int index = 1; index < 3; index++)
+            for (int index = 1; index < 30; index++)
             {
                 PostgresBook book = new PostgresBook
                 {
@@ -75,7 +77,7 @@ namespace Library3.Helpers
                 books.Add(book);
             }
 
-            for (int index = 1; index < 3; index++)
+            for (int index = 1; index < 30; index++)
             {
                 PostgresAuthor author = new PostgresAuthor
                 {
@@ -93,11 +95,15 @@ namespace Library3.Helpers
                 foreach (var book in books) session.Save(book);
                 foreach (var author in authors) session.Save(author);
 
-                books[0].Author = authors[0];
-                authors[0].Books = new List<PostgresBook> { books[0] };
+                for (var i = 0; i < books.Count; i++)
+                {
+                    books[i].Author = authors[i];
+                    authors[i].Books = new List<PostgresBook> { books[i] };
+                }
 
-                session.Update(books[0]);
-                session.Update(authors[0]);
+
+                foreach (var book in books) session.Save(book);
+                foreach (var author in authors) session.Save(author);
 
                 tx.Commit();
             }

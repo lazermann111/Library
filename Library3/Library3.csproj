@@ -172,6 +172,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="API.txt" />
     <Content Include="Global.asax" />
     <Content Include="scripts\ai.0.22.9-build00167.js" />
     <Content Include="scripts\ai.0.22.9-build00167.min.js" />
@@ -184,7 +185,9 @@
     <Compile Include="Controllers\AuthorsController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
+    <Compile Include="DTO\AuthorBaseDto.cs" />
     <Compile Include="DTO\AuthorDto.cs" />
+    <Compile Include="DTO\BookBaseDto.cs" />
     <Compile Include="DTO\BookDto.cs" />
     <Compile Include="Entities\Postgres\PostgresAuthor.cs" />
     <Compile Include="Entities\Postgres\PostgresBook.cs" />
@@ -193,6 +196,7 @@
     </Compile>
     <Compile Include="Helpers\AutomapperConfiguration.cs" />
     <Compile Include="Helpers\DbHelper.cs" />
+    <Compile Include="Helpers\Mappers.cs" />
     <Compile Include="Helpers\MongoSessionManager.cs" />
     <Compile Include="Helpers\PostgresSessionManager.cs" />
     <Compile Include="Entities\Mongo\MongoAuthor.cs" />

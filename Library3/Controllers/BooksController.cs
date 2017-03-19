@@ -40,7 +40,7 @@ namespace Library3.Controllers
             public IEnumerable<BookDto> GetBookByAuthor(string author)
             {
                 return _repository.GetAll().Where(
-                    p => p != null && string.Equals(p.Author.Name, author, StringComparison.OrdinalIgnoreCase));
+                    p => p.Author != null && string.Equals(p.Author.Name, author, StringComparison.OrdinalIgnoreCase));
             }
 
             public HttpResponseMessage PostBook(string name, string authorId)

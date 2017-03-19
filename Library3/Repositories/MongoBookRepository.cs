@@ -25,23 +25,23 @@ namespace Library3.Repositories
         public BookDto Get(string id)
         {
             var q = Query.EQ("_id", id);
-            var book = _books.FindOne(q);
-            var author =
+            var book = _books.FindOne(q).Map();
+           /* var author =
                 MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors")
                     .FindOne(Query.EQ("_id", book.AuthorId));
             book.AuthorId = author.Id;
-
-            var dto = AutoMapper.Mapper.Map<BookDto>(book);
-            dto.Author = AutoMapper.Mapper.Map<AuthorDto>(author);
-            return dto;
+            */
+           // var dto = AutoMapper.Mapper.Map<BookDto>(book);
+            //dto.Author = AutoMapper.Mapper.Map<AuthorDto>(author);
+            return book;
         }
 
         public IEnumerable<BookDto> GetAll()
         {
             MongoCursor<MongoBook> cursor = _books.FindAll();
-            var c = cursor.ToList();
-            var dto = AutoMapper.Mapper.Map<List<BookDto>>(c);
-            return dto;
+            var c = cursor.ToList().Select(book => book.Map());
+            
+            return c;
         }
 
         public void Remove(string id)
@@ -55,8 +55,13 @@ namespace Library3.Repositories
             var authors = MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors");
             var author = authors.FindOne(Query.EQ("_id", authorId));
 
-            var item = new MongoBook() { Name = name, AuthorId = author.Id };
-            item.Id = ObjectId.GenerateNewId().ToString();
+            var item = new MongoBook
+            {
+                Name = name,
+                AuthorId =
+                    new MongoDBRef(MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors").Name, author.Id),
+                Id = ObjectId.GenerateNewId().ToString()
+            };
             _books.Insert(item);
             
         }
@@ -66,7 +71,8 @@ namespace Library3.Repositories
             var item = _books.FindOne(Query.EQ("_id", id));
             if (item == null) return false;
 
-            item.AuthorId = MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors").FindOne(Query.EQ("_id", authorId)).Id;
+            /*item.AuthorId = 
+                MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors").FindOne(Query.EQ("_id", authorId)).Id;*/
             item.Name = name;
 
             _books.Save(item);

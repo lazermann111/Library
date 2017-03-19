@@ -23,9 +23,9 @@ namespace Library3.Controllers
             _repository = WebApiApplication.MongoDbUsed ? (IAuthorReposiory) mongo: postgres;
         }
 
-        public IEnumerable<AuthorDto> GetAllAuthors()
+        public IEnumerable<AuthorDto> GetAllAuthors(int page)
         {
-            return _repository.GetAll();
+            return _repository.GetAll(page);
         }
 
         public AuthorDto GetAuthor(string id)

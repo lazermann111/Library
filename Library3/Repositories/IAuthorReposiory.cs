@@ -10,7 +10,7 @@ namespace Library3.Repositories
 {
     interface IAuthorReposiory
     {
-        IEnumerable<AuthorDto> GetAll();
+        IEnumerable<AuthorDto> GetAll(int page);
         AuthorDto Get(string id);
         void Add(string name);
         void Remove(string id);
