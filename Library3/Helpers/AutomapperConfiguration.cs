@@ -22,8 +22,6 @@ namespace Library3.Helpers
             Mapper.CreateMap<PostgresBook, BookDto>();
             Mapper.CreateMap<PostgresAuthor, AuthorDto>();
 
-
-
           /*  Mapper.CreateMap<MongoBook, BookBaseDto>();
             Mapper.CreateMap<MongoAuthor, AuthorBaseDto>();
             Mapper.CreateMap<MongoBook, BookDto>()

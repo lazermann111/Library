@@ -30,7 +30,7 @@ namespace Library3.Helpers
                     .Port(5432)
                     .Database("test")
                     .Username("postgres")
-                    .Password("")))
+                    .Password("postgres")))
                  .Mappings(c => c.FluentMappings.AddFromAssemblyOf<PostgresAuthorMap>().Conventions.Add(AutoImport.Never()))
                 .ExposeConfiguration(config => new SchemaExport(config).Create(false, true))
                 .BuildSessionFactory();

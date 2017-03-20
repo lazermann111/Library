@@ -174,8 +174,6 @@
   <ItemGroup>
     <Content Include="API.txt" />
     <Content Include="Global.asax" />
-    <Content Include="scripts\ai.0.22.9-build00167.js" />
-    <Content Include="scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -209,7 +207,6 @@
     <Compile Include="Repositories\MongoBookRepository.cs" />
     <Compile Include="Repositories\PostgresAuthorRepository.cs" />
     <Compile Include="Repositories\PostgresBookRepository.cs" />
-    <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +223,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="scripts\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

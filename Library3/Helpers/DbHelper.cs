@@ -81,7 +81,7 @@ namespace Library3.Helpers
             {
                 PostgresAuthor author = new PostgresAuthor
                 {
-                //    Id = ObjectId.GenerateNewId().ToString(),
+             
                     Name = string.Format("author{0}", index),
                 };
                 authors.Add(author);

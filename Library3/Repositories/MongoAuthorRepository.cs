@@ -34,9 +34,6 @@ namespace Library3.Repositories
 
         public AuthorDto Get(string id)
         {
-          // var filter = Builders<AuthorId>.Filter.Eq("Id", id);
-          // var filter2 = Builders<AuthorId>.Filter.Eq("_id", id);
-          // var filter3 = Builders<AuthorId>.Filter.Eq("Name", id);
            var q = Query.EQ("_id", id);
            var author = _authors.FindOne(q).Map();
            

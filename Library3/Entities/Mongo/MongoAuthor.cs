@@ -13,8 +13,6 @@ namespace Library3.Entities.Mongo
         [BsonId]
         public virtual string Id { get; set; }
         public virtual string Name { get; set; }
-       // public virtual ICollection<MongoBook> Books { get; set; }
-
         public virtual IEnumerable<MongoDBRef> BookIds { get; set; }
     }
 }

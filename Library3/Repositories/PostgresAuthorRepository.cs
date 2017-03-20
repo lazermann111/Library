@@ -23,7 +23,7 @@ namespace Library3.Models.Repositories
 
         public AuthorDto Get(string id)
         {
-            var author =  PostgresSessionManager.OpenSession().Get<PostgresAuthor>(Int16.Parse(id));
+            var author =  PostgresSessionManager.OpenSession().Get<PostgresAuthor>(Int32.Parse(id));
             var dto = AutoMapper.Mapper.Map<AuthorDto>(author);
             return dto;
         }
@@ -38,14 +38,14 @@ namespace Library3.Models.Repositories
         public void Remove(string id)
         {
             var session = PostgresSessionManager.OpenSession();
-            var author = session.Get<PostgresAuthor>(Int16.Parse(id));
+            var author = session.Get<PostgresAuthor>(Int32.Parse(id));
             session.Delete(author);
         }
 
         public bool Update(string authorId, string name)
         {
             var session = PostgresSessionManager.OpenSession();
-            var author = session.Get<PostgresAuthor>(Int16.Parse(authorId));
+            var author = session.Get<PostgresAuthor>(Int32.Parse(authorId));
 
             if (author == null) return false;
 

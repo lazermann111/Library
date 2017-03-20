@@ -4,10 +4,12 @@ http://localhost:51140/api/authors/PostAuthor/?name=NewAuthor								POST
 http://localhost:51140/api/authors/PutAuthor/?id=58cef0eaf7301a2c88b7032d&name=NewAuthor	PUT
 http://localhost:51140/api/authors/DeleteAuthor/?id=58cef0eaf7301a2c88b7032d	 			DELETE
 
-http://localhost:51140/api/books/GetAllBooks												GET
+http://localhost:51140/api/books/GetAllBooks		- test only								GET
 http://localhost:51140/api/books/GetBook/58cef0eaf7301a2c88b7032d							GET
 http://localhost:51140/api/books/PostBook/?name=NewAuthor&authorId=1111						POST
 http://localhost:51140/api/books/PutBook/?id=58cef0eaf7301a2c88b7032d&name=NewAuthor&authorId=1111	PUT
 http://localhost:51140/api/books/DeleteBook/?id=58cef0eaf7301a2c88b7032d	 				DELETE
 
 http://localhost:51140/api/books/GetBookByAuthor/?author=NAME								GET
+
+http://localhost:51140/api/switch/switch		- switch between databases					POST

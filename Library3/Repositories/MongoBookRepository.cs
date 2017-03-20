@@ -26,13 +26,6 @@ namespace Library3.Repositories
         {
             var q = Query.EQ("_id", id);
             var book = _books.FindOne(q).Map();
-           /* var author =
-                MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors")
-                    .FindOne(Query.EQ("_id", book.AuthorId));
-            book.AuthorId = author.Id;
-            */
-           // var dto = AutoMapper.Mapper.Map<BookDto>(book);
-            //dto.Author = AutoMapper.Mapper.Map<AuthorDto>(author);
             return book;
         }
 
@@ -69,10 +62,7 @@ namespace Library3.Repositories
         public bool Update(string id, string name, string authorId)
         {
             var item = _books.FindOne(Query.EQ("_id", id));
-            if (item == null) return false;
-
-            /*item.AuthorId = 
-                MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors").FindOne(Query.EQ("_id", authorId)).Id;*/
+            if (item == null) return false; 
             item.Name = name;
 
             _books.Save(item);
