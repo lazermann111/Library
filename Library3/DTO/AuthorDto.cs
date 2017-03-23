@@ -7,6 +7,6 @@ namespace Library3.DTO
 {
     public class AuthorDto : AuthorBaseDto
     {       
-        public virtual ICollection<BookDto> Books { get; set; }
+        public  ICollection<BookDto> Books { get; set; }
     }
 }

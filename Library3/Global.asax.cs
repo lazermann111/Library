@@ -20,8 +20,13 @@ namespace Library3
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
             AutomapperConfiguration.Configure();
-            DbHelper.GenerateMongoDbContent();
-            DbHelper.GeneratePostgresContent();
+
+            if (false)
+            {
+                DbHelper.GenerateMongoDbContent();
+                DbHelper.GeneratePostgresContent();
+            }
+          
         }
     }
 }

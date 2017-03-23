@@ -19,20 +19,21 @@ namespace Library3.Helpers
 {
     public class DbHelper
     {
+        private const int dbEnttries = 50000;
+
         public static void GenerateMongoDbContent()
         {
 
-            var server = new MongoClient("mongodb://localhost:27017").GetServer();
-            var _books = server.GetDatabase("local").GetCollection<MongoBook>("Books");
-            var _authors = server.GetDatabase("local").GetCollection<MongoBook>("Authors");
+            
+            var _books =   MongoSessionManager.Database.GetCollection<MongoBook>("Books");
+            var _authors = MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors");
 
-            _books.RemoveAll();
-            _authors.RemoveAll();
+           
 
             IList<MongoBook> books = new List<MongoBook>();
             IList<MongoAuthor> authors = new List<MongoAuthor>();
 
-            for (int index = 1; index < 30; index++)
+            for (int index = 1; index < dbEnttries; index++)
             {
                 MongoBook book = new MongoBook
                 {
@@ -42,7 +43,7 @@ namespace Library3.Helpers
                 books.Add(book);
             }
             
-            for (int index = 1; index < 30; index++)
+            for (int index = 1; index < dbEnttries; index++)
             {
                 MongoAuthor author = new MongoAuthor
                 {
@@ -54,11 +55,11 @@ namespace Library3.Helpers
 
             for (var i = 0; i < books.Count; i++)
             {
-                books[i].AuthorId = new MongoDBRef(_authors.Name, authors[i].Id);
-                authors[i].BookIds = new List<MongoDBRef> {new MongoDBRef(_books.Name, books[i].Id) };
+                books[i].AuthorId = new MongoDBRef("Authors", authors[i].Id);
+                authors[i].BookIds = new List<MongoDBRef> {new MongoDBRef("Books", books[i].Id) };
             }
-            foreach (var book in books) _books.Insert(book);
-            foreach (var author in authors) _authors.Insert(author);
+            _books.InsertMany(books);
+            _authors.InsertMany(authors);
             
         }
 
@@ -67,7 +68,7 @@ namespace Library3.Helpers
             IList<PostgresBook> books = new List<PostgresBook>();
             IList<PostgresAuthor> authors = new List<PostgresAuthor>();
 
-            for (int index = 1; index < 30; index++)
+            for (int index = 1; index < dbEnttries; index++)
             {
                 PostgresBook book = new PostgresBook
                 {
@@ -77,7 +78,7 @@ namespace Library3.Helpers
                 books.Add(book);
             }
 
-            for (int index = 1; index < 30; index++)
+            for (int index = 1; index < dbEnttries; index++)
             {
                 PostgresAuthor author = new PostgresAuthor
                 {

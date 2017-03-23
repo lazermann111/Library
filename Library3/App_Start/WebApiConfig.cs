@@ -12,6 +12,7 @@ namespace Library3
             
             config.MapHttpAttributeRoutes();
 
+          
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{action}/{id}",

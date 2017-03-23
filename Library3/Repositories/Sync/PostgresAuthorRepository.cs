@@ -11,7 +11,7 @@ using Library3.Postgres;
 
 namespace Library3.Models.Repositories
 {
-    public class PostgresAuthorRepository : IAuthorReposiory
+    public class PostgresAuthorRepository : IAuthorRepository
     {
         public void Add(string name)
         {
@@ -28,7 +28,7 @@ namespace Library3.Models.Repositories
             return dto;
         }
 
-        public IEnumerable<AuthorDto> GetAll(int page)
+        public  IEnumerable<AuthorDto> GetAll(int page)
         {
             var authors = PostgresSessionManager.OpenSession().QueryOver<PostgresAuthor>().List().OrderBy(a => a.Name).Skip(page * 10).Take(10);
             var dtos = AutoMapper.Mapper.Map<List<AuthorDto>>(authors);

@@ -11,23 +11,29 @@ using System.Web.Http;
 
 namespace Library3.Controllers
 {
+    [RoutePrefix("api/authors")]
     public class AuthorsController : ApiController
     {
         private static MongoAuthorRepository mongo = new MongoAuthorRepository();
         private static PostgresAuthorRepository postgres = new PostgresAuthorRepository();
 
-        private IAuthorReposiory _repository;
+        private IAuthorRepository _repository;
 
         public AuthorsController()
         {
-            _repository = WebApiApplication.MongoDbUsed ? (IAuthorReposiory) mongo: postgres;
+            _repository = WebApiApplication.MongoDbUsed ? (IAuthorRepository) mongo: postgres;
         }
 
+
+        [HttpGet]
+        [Route("GetAll")]
         public IEnumerable<AuthorDto> GetAllAuthors(int page)
         {
             return _repository.GetAll(page);
         }
 
+        [HttpGet]
+        [Route("Get")]
         public AuthorDto GetAuthor(string id)
         {
             AuthorDto item = _repository.Get(id);
@@ -38,7 +44,8 @@ namespace Library3.Controllers
             return item;
         }
 
-       
+        [HttpPost]
+        [Route("Save")]
         public HttpResponseMessage PostAuthor(string name)
         {
              _repository.Add(name);
@@ -46,6 +53,8 @@ namespace Library3.Controllers
             return response;
         }
 
+        [HttpPut]
+        [Route("Update")]
         public void PutAuthor(string id, string name)
         {       
             if (!_repository.Update(id, name))
@@ -53,7 +62,8 @@ namespace Library3.Controllers
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
         }
-
+        [HttpDelete]
+        [Route("Delete")]
         public void DeleteAuthor(string id)
         {
             _repository.Remove(id);

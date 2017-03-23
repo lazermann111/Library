@@ -8,10 +8,9 @@ using MongoDB.Driver;
 
 namespace Library3.Entities.Mongo
 {
-    public class MongoBook
+    public class MongoBook : MongoEntity
     {
-        [BsonId]
-        public virtual string Id { get; set; }
+       
         public virtual string Name { get; set; }
         public virtual MongoDBRef AuthorId { get; set; }
     }

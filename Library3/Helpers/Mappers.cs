@@ -5,6 +5,7 @@ using System.Web;
 using Library3.DTO;
 using Library3.Entities.Mongo;
 using MongoDB.Driver;
+using System.Threading.Tasks;
 
 namespace Library3.Helpers
 {
@@ -16,7 +17,7 @@ namespace Library3.Helpers
             {
                 Id =  b.Id,
                 Name = b.Name,
-                Author = MongoSessionManager.Database.FetchDBRefAs<MongoAuthor>(b?.AuthorId).BaseMap()
+                Author = MongoSessionManager.Database.FetchDBRef<MongoAuthor>(b?.AuthorId)?.BaseMap()
             };
         }
 
@@ -36,8 +37,7 @@ namespace Library3.Helpers
                 Id = a.Id,
                 Name = a.Name,
                 Books = a.BookIds
-                .Select(book => MongoSessionManager.Database.FetchDBRefAs<MongoBook>(book)
-                .BaseMap()).ToList()
+                .Select(book =>  MongoSessionManager.Database.FetchDBRef<MongoBook>(book)?.BaseMap()).ToList()
             };
         }
 
@@ -48,6 +48,12 @@ namespace Library3.Helpers
                 Id = a.Id,
                 Name = a.Name,
             };
+        }
+
+        public static  T FetchDBRef<T>(this IMongoDatabase database, MongoDBRef reference) where T : MongoEntity
+        {
+            var filter = Builders<T>.Filter.Eq(e => e.Id, reference.Id.AsString);
+            return  database.GetCollection<T>(reference.CollectionName).Find(filter).FirstOrDefault();
         }
     }
 }

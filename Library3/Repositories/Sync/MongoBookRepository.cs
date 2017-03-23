@@ -15,7 +15,7 @@ namespace Library3.Repositories
     public class MongoBookRepository : IBookrepository
     {
       
-        MongoCollection<MongoBook> _books;
+        IMongoCollection<MongoBook> _books;
 
         public MongoBookRepository()
         {
@@ -24,14 +24,14 @@ namespace Library3.Repositories
 
         public BookDto Get(string id)
         {
-            var q = Query.EQ("_id", id);
-            var book = _books.FindOne(q).Map();
+            //var q = Query.EQ("_id", id);
+            var book = _books.Find(q => q.Id == id).FirstOrDefault().Map();
             return book;
         }
 
         public IEnumerable<BookDto> GetAll()
         {
-            MongoCursor<MongoBook> cursor = _books.FindAll();
+            var cursor = _books.Find(_ => true).ToList();
             var c = cursor.ToList().Select(book => book.Map());
             
             return c;
@@ -39,33 +39,33 @@ namespace Library3.Repositories
 
         public void Remove(string id)
         {
-            var query = Query.EQ("_id", id);
-            _books.Remove(query);
+           // var query = Query.EQ("_id", id);
+            _books.DeleteOne(b => b.Id == id);
         }
 
         public void Add(string name, string authorId)
         {
             var authors = MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors");
-            var author = authors.FindOne(Query.EQ("_id", authorId));
+            var author = authors.Find(b => b.Id == authorId).FirstOrDefault();
 
             var item = new MongoBook
             {
                 Name = name,
                 AuthorId =
-                    new MongoDBRef(MongoSessionManager.Database.GetCollection<MongoAuthor>("Authors").Name, author.Id),
+                    new MongoDBRef("Authors", author.Id),
                 Id = ObjectId.GenerateNewId().ToString()
             };
-            _books.Insert(item);
+            _books.InsertOne(item);
             
         }
 
         public bool Update(string id, string name, string authorId)
         {
-            var item = _books.FindOne(Query.EQ("_id", id));
+            var item = _books.Find(b => b.Id == id).FirstOrDefault();
             if (item == null) return false; 
             item.Name = name;
 
-            _books.Save(item);
+            _books.ReplaceOne(av => av.Id == id, item);
 
             return true;
         }

@@ -10,14 +10,15 @@ using Library3.Repositories;
 using Library3.DTO;
 using Library3.Entities.Mongo;
 using Library3.Helpers;
+using Library3.Repositories.Async;
 
 namespace Library3.Repositories
 {
-    public class MongoAuthorRepository : IAuthorReposiory
+    public class MongoAuthorRepository : IAuthorRepository
     {
 
         
-        MongoCollection<MongoAuthor> _authors;
+        IMongoCollection<MongoAuthor> _authors;
 
         public MongoAuthorRepository()
         {
@@ -27,15 +28,15 @@ namespace Library3.Repositories
 
         public IEnumerable<AuthorDto> GetAll(int page)
         {
-            MongoCursor<MongoAuthor> cursor = _authors.FindAll();
+            var cursor = _authors.Find(_ => true);
             var dto = cursor.ToList().OrderBy(a => a.Name).Skip(page * 10).Take(10).Select(d => d.Map());
             return dto;
         }
 
         public AuthorDto Get(string id)
         {
-           var q = Query.EQ("_id", id);
-           var author = _authors.FindOne(q).Map();
+          // var q = Query.EQ("_id", id);
+           var author = _authors.Find(a => a.Id == id).FirstOrDefault()?.Map();
            
            return author;
         }
@@ -44,17 +45,18 @@ namespace Library3.Repositories
 
         public void Remove(string id)
         {
-            var query = Query.EQ("_id", id);
-            _authors.Remove(query);
+            //var query = Query.EQ("_id", id);
+            _authors.DeleteOne(b => b.Id == id);
         }
 
         public bool Update(string authorId, string name)
         {
-            var item = _authors.FindOne(Query.EQ("_id", authorId));
+           // var item = _authors.FindOne(Query.EQ("_id", authorId));
+            var item = _authors.Find(a => a.Id == authorId).FirstOrDefault();
             if (item == null) return false;
 
             item.Name = name;
-            _authors.Save(item);
+            _authors.ReplaceOne(a => a.Id == authorId, item);
 
             return true;
         }
@@ -66,7 +68,7 @@ namespace Library3.Repositories
                 Id = ObjectId.GenerateNewId().ToString(),
                 Name = $"author{name}",
             };
-            _authors.Insert(b);
+            _authors.InsertOne(b);
         }
     }
 }

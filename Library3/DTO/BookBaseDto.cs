@@ -7,7 +7,7 @@ namespace Library3.DTO
 {
     public class BookBaseDto
     {
-        public virtual string Id { get; set; }
-        public virtual string Name { get; set; }
+        public  string Id { get; set; }
+        public  string Name { get; set; }
     }
 }
