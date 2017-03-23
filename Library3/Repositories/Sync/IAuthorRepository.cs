@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Library3.Repositories
 {
-    interface IAuthorRepository
+    public interface IAuthorRepository
     {
         IEnumerable<AuthorDto> GetAll(int page);
         AuthorDto Get(string id);

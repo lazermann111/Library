@@ -8,7 +8,7 @@ using Library3.DTO;
 
 namespace Library3.Repositories
 {
-    interface IBookrepository
+    public interface IBookrepository
     {
         IEnumerable<BookDto> GetAll();
         BookDto Get(string id);

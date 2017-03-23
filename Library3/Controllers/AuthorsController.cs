@@ -14,14 +14,15 @@ namespace Library3.Controllers
     [RoutePrefix("api/authors")]
     public class AuthorsController : ApiController
     {
-        private static MongoAuthorRepository mongo = new MongoAuthorRepository();
-        private static PostgresAuthorRepository postgres = new PostgresAuthorRepository();
+        //private static MongoAuthorRepository mongo = new MongoAuthorRepository();
+        //private static PostgresAuthorRepository postgres = new PostgresAuthorRepository();
 
-        private IAuthorRepository _repository;
+        public IAuthorRepository _repository;
 
-        public AuthorsController()
+        public AuthorsController(IAuthorRepository repository)
         {
-            _repository = WebApiApplication.MongoDbUsed ? (IAuthorRepository) mongo: postgres;
+            //_repository = WebApiApplication.MongoDbUsed ? (IAuthorRepository) mongo: postgres;
+            _repository = repository;
         }
 
 
