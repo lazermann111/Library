@@ -27,8 +27,8 @@ namespace Library3.Repositories.Async
 
         public async Task<IEnumerable<AuthorDto>> GetAll(int page)
         {
-            var cursor = await _authors.Find(_ => true).ToListAsync();
-            var dto = cursor.OrderBy(a => a.Name).Skip(page * 10).Take(10).Select(d => d.Map());
+            var cursor = await _authors.FindAsync(_ => true);
+            var dto = cursor.ToEnumerable().OrderBy(a => a.Name).Skip(page * 10).Take(10).Select(d => d.Map());
             return dto;
         }
 

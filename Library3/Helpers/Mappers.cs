@@ -17,7 +17,7 @@ namespace Library3.Helpers
             {
                 Id =  b.Id,
                 Name = b.Name,
-                Author = MongoSessionManager.Database.FetchDBRef<MongoAuthor>(b?.AuthorId)?.BaseMap()
+              //  Author = MongoSessionManager.Database.FetchDBRef<MongoAuthor>(b?.AuthorId)?.BaseMap()
             };
         }
 
@@ -36,8 +36,8 @@ namespace Library3.Helpers
             {
                 Id = a.Id,
                 Name = a.Name,
-                Books = a.BookIds
-                .Select(book =>  MongoSessionManager.Database.FetchDBRef<MongoBook>(book)?.BaseMap()).ToList()
+             //   Books = a.BookIds
+             //   .Select(book =>  MongoSessionManager.Database.FetchDBRef<MongoBook>(book)?.BaseMap()).ToList()
             };
         }
 

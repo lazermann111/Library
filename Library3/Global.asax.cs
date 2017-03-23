@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
@@ -26,7 +27,14 @@ namespace Library3
                 DbHelper.GenerateMongoDbContent();
                 DbHelper.GeneratePostgresContent();
             }
-          
+
+            int workerThreads;
+            int completionPortThreads;
+            ThreadPool.GetMaxThreads(out workerThreads, out completionPortThreads);
+            Console.WriteLine("workerThreads " + workerThreads);
+            Console.WriteLine(completionPortThreads);
+
+            Console.WriteLine(System.Diagnostics.Process.GetCurrentProcess().Threads.Count); ;
         }
     }
 }
