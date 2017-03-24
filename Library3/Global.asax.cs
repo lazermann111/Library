@@ -22,7 +22,7 @@ namespace Library3
 
             AutomapperConfiguration.Configure();
 
-            if (false)
+            if (true)
             {
                 DbHelper.GenerateMongoDbContent();
                 DbHelper.GeneratePostgresContent();

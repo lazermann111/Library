@@ -2,6 +2,7 @@
 using Library3.Models;
 using Library3.Models.Repositories;
 using Library3.Repositories;
+using Library3.Repositories.Sync;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +20,10 @@ namespace Library3.Controllers
 
         public IAuthorRepository _repository;
 
-        public AuthorsController(IAuthorRepository repository)
+        public AuthorsController(AuthorRepositoryProxy proxy)
         {
             //_repository = WebApiApplication.MongoDbUsed ? (IAuthorRepository) mongo: postgres;
-            _repository = repository;
+            _repository = proxy.Repository;
         }
 
 

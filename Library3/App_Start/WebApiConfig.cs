@@ -1,5 +1,7 @@
 ﻿using Library3.Models.Repositories;
 using Library3.Repositories;
+using Library3.Repositories.Async;
+using Library3.Repositories.Sync;
 using Library3.Resolver;
 using Microsoft.Practices.Unity;
 using System;
@@ -19,8 +21,20 @@ namespace Library3
             container.RegisterType<IBookrepository, MongoBookRepository>(new HierarchicalLifetimeManager());
             container.RegisterType<IBookrepository, PostgresBookRepository>(new HierarchicalLifetimeManager());
 
+            container.RegisterType<BookRepositoryProxy, BookRepositoryProxy>(
+                new InjectionConstructor(  
+                    new ResolvedParameter<MongoBookRepository>(),
+                    new ResolvedParameter<PostgresBookRepository>()
+                ));
+
             container.RegisterType<IAuthorRepository, MongoAuthorRepository>(new HierarchicalLifetimeManager());
             container.RegisterType<IAuthorRepository, PostgresAuthorRepository>(new HierarchicalLifetimeManager());
+
+            container.RegisterType<AuthorRepositoryProxy, AuthorRepositoryProxy>(
+               new InjectionConstructor(
+                   new ResolvedParameter<MongoAuthorRepository>(),
+                   new ResolvedParameter<PostgresAuthorRepository>()
+               ));
 
             config.DependencyResolver = new UnityResolver(container);
 

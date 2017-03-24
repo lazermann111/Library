@@ -1,6 +1,7 @@
 ﻿using Library3.DTO;
 using Library3.Models;
 using Library3.Repositories;
+using Library3.Repositories.Async;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +14,11 @@ namespace Library3.Controllers
     public class BooksController : ApiController
     {
 
-        private static MongoBookRepository mongo = new MongoBookRepository();
-        private static PostgresBookRepository postgres = new PostgresBookRepository();
-
         private IBookrepository _repository;
-        public BooksController()
+
+        public BooksController(BookRepositoryProxy proxy)
         {
-            _repository = WebApiApplication.MongoDbUsed ? (IBookrepository) mongo : postgres;
+            _repository = proxy.Repository;
         }
 
             public IEnumerable<BookDto> GetAllBooks()
